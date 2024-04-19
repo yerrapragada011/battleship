@@ -8,8 +8,8 @@ function startGame() {
   player1.gameboard.setPredeterminedShips()
   player2.gameboard.setPredeterminedShips()
 
-  renderGameboard(player1, 'player1-board')
-  renderGameboard(player2, 'player2-board')
+  renderGameboard(player1, 'player1-board', player2)
+  renderGameboard(player2, 'player2-board', player1)
 }
 
 document.getElementById('start-game').addEventListener('click', startGame)

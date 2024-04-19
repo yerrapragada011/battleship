@@ -57,14 +57,44 @@ export class Gameboard {
   }
 
   setPredeterminedShips() {
-    const shipCoordinates = [
-      { x: 0, y: 0, length: 3, horizontal: true },
-      { x: 2, y: 3, length: 4, horizontal: false }
-    ]
+    const shipLengths = [3, 4, 5, 2, 3]
 
-    shipCoordinates.forEach(({ x, y, length, horizontal }) => {
+    shipLengths.forEach((length) => {
+      let horizontal = Math.random() < 0.5
+      let x, y
+
+      let overlap = true
+      while (overlap) {
+        if (horizontal) {
+          x = Math.floor(Math.random() * (10 - length + 1))
+          y = Math.floor(Math.random() * 10)
+        } else {
+          x = Math.floor(Math.random() * 10)
+          y = Math.floor(Math.random() * (10 - length + 1))
+        }
+
+        overlap = this.checkOverlap(x, y, length, horizontal)
+      }
+
       const ship = new Ship(length)
       this.placeShip(ship, x, y, horizontal)
     })
+  }
+
+  checkOverlap(x, y, length, horizontal) {
+    if (horizontal) {
+      for (let i = x; i < x + length; i++) {
+        if (this.board[i][y] !== null) {
+          return true
+        }
+      }
+    } else {
+      for (let i = y; i < y + length; i++) {
+        if (this.board[x][i] !== null) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }
