@@ -1,9 +1,9 @@
-import { Ship, Gameboard } from './script'
+import { Ship, Gameboard, Player } from './script'
 
 describe('Ship class', () => {
   const ship = new Ship(5)
 
-  test('test ship sink', () => {
+  test('Test ship sink', () => {
     expect(ship._sunk).toBe(false)
 
     ship.hit()
@@ -18,10 +18,10 @@ describe('Ship class', () => {
 
 describe('Gameboard class', () => {
   const gameboard = new Gameboard()
-  const ship1 = new Ship(5)
+  const ship = new Ship(5)
 
-  test('attack ship', () => {
-    gameboard.placeShip(ship1, 2, 3, true)
+  test('Attack ship', () => {
+    gameboard.placeShip(ship, 2, 3, true)
 
     gameboard.recieveAttack(4, 5)
 
@@ -32,6 +32,25 @@ describe('Gameboard class', () => {
     gameboard.recieveAttack(2, 3)
     gameboard.recieveAttack(2, 3)
     gameboard.recieveAttack(2, 3)
+
+    expect(gameboard.allShipsSunk()).toBe(true)
+  })
+})
+
+describe('Player class', () => {
+  const player1 = new Player()
+  const player2 = new Player()
+  const gameboard = new Gameboard()
+  const ship = new Ship(5)
+
+  test('Attack player', () => {
+    player1.placeShip(ship, 2, 3, true)
+
+    player2.attack(2, 3, player1)
+    player2.attack(2, 3, player1)
+    player2.attack(2, 3, player1)
+    player2.attack(2, 3, player1)
+    player2.attack(2, 3, player1)
 
     expect(gameboard.allShipsSunk()).toBe(true)
   })

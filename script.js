@@ -49,7 +49,7 @@ export class Gameboard {
         positions.push([i, y])
       }
     } else {
-      if ((y + shipLength > 10)) {
+      if (y + shipLength > 10) {
         throw new Error('Ship placement out of bounds')
       }
 
@@ -80,5 +80,24 @@ export class Gameboard {
 
   allShipsSunk() {
     return this.ships.every((ship) => ship.isSunk())
+  }
+}
+
+export class Player {
+  constructor(isComputer = false) {
+    this.isComputer = isComputer
+    this.gameboard = new Gameboard()
+  }
+
+  placeShip(ship, x, y, horizontal) {
+    this.gameboard.placeShip(ship, x, y, horizontal)
+  }
+
+  attack(x, y, targetPlayer) {
+    if (!this.isComputer && targetPlayer) {
+      targetPlayer.gameboard.recieveAttack(x, y)
+    } else {
+      throw new Error('Computer player cannot attack without a target player')
+    }
   }
 }
