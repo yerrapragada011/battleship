@@ -1,4 +1,6 @@
-import { Ship, Gameboard, Player } from './script'
+import { Ship } from './src/ship'
+import { Gameboard } from './src/gameboard'
+import { Player } from './src/player'
 
 describe('Ship class', () => {
   const ship = new Ship(5)
