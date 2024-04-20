@@ -24,7 +24,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
 
         if (targetPlayer.isComputer) {
           setTimeout(() => {
-            computerPlayerAttack(targetPlayer, player, 'player2-board')
+            computerPlayerAttack(targetPlayer, player)
           }, 1000)
         }
       })
@@ -56,7 +56,7 @@ function createTable(gameboard, containerId) {
   return table
 }
 
-function computerPlayerAttack(computerPlayer, humanPlayer, containerId) {
+function computerPlayerAttack(computerPlayer, humanPlayer) {
   const row = Math.floor(Math.random() * 10)
   const col = Math.floor(Math.random() * 10)
   console.log('Row:', row, 'Col:', col)
@@ -65,19 +65,15 @@ function computerPlayerAttack(computerPlayer, humanPlayer, containerId) {
     `[data-row="${row}"][data-col="${col}"][data-container="player2-board"]`
   )
 
-  const attackResult = computerPlayer.attack(row, col, humanPlayer)
+  computerPlayer.attack(row, col, humanPlayer)
 
-  if (attackResult === 'hit') {
-    if (cell.textContent === 'O') {
-      console.log('hit')
-      cell.textContent = 'X'
-      cell.style.color = 'red'
-    }
+  if (cell.textContent === 'O') {
+    console.log('hit')
+    cell.textContent = 'X'
+    cell.style.color = 'red'
   } else {
     if (cell.textContent === '-') {
       console.log('miss')
-      cell.textContent = '-'
-      cell.style.color = 'red'
     }
   }
 }
