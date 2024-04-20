@@ -11,7 +11,7 @@ export class Player {
   }
 
   attack(x, y, targetPlayer) {
-    if (!this.isComputer && targetPlayer) {
+    if (targetPlayer) {
       targetPlayer.gameboard.recieveAttack(x, y)
     } else {
       throw new Error('Computer player cannot attack without a target player')

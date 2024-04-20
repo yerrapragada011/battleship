@@ -49,6 +49,7 @@ export class Gameboard {
     } else {
       let ship = this.board[x][y]
       ship.hit()
+      return 'hit'
     }
   }
 

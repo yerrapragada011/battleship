@@ -20,7 +20,9 @@ describe('Ship class', () => {
 
 describe('Gameboard class', () => {
   const gameboard = new Gameboard()
+  const gameboard2 = new Gameboard()
   const ship = new Ship(5)
+  const ship2 = new Ship(5)
 
   test('Attack ship', () => {
     gameboard.placeShip(ship, 2, 3, true)
@@ -36,6 +38,12 @@ describe('Gameboard class', () => {
     gameboard.recieveAttack(2, 3)
 
     expect(gameboard.allShipsSunk()).toBe(true)
+  })
+
+  test('Attack ship return', () => {
+    gameboard2.placeShip(ship2, 2, 3, true)
+
+    expect(gameboard2.recieveAttack(2, 3)).toBe('hit')
   })
 })
 
