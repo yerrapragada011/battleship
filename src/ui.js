@@ -3,7 +3,11 @@ export function renderGameboard(player, containerId, targetPlayer) {
   container.innerHTML = ''
 
   const currentPlayerGameboard = player.gameboard.board
-  const currentPlayerTable = createTable(currentPlayerGameboard, containerId)
+  const currentPlayerTable = createTable(
+    currentPlayerGameboard,
+    containerId,
+    true
+  )
   container.appendChild(currentPlayerTable)
 
   const targetPlayerGameboard = targetPlayer.gameboard.board
@@ -32,7 +36,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
   }
 }
 
-function createTable(gameboard, containerId) {
+function createTable(gameboard, containerId, hideShips = false) {
   const table = document.createElement('table')
   table.classList.add('table')
 
@@ -42,8 +46,12 @@ function createTable(gameboard, containerId) {
     for (let j = 0; j < gameboard[i].length; j++) {
       const cell = document.createElement('td')
       cell.classList.add('cell')
-      const content = gameboard[i][j] ? 'O' : '-'
-      cell.textContent = content
+      if (hideShips && gameboard[i][j]) {
+        cell.textContent = 'O'
+        cell.style.color = 'transparent'
+      } else {
+        cell.textContent = gameboard[i][j] ? 'O' : ''
+      }
       cell.dataset.row = i
       cell.dataset.col = j
       cell.dataset.container = containerId
@@ -72,7 +80,7 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
     cell.textContent = 'X'
     cell.style.color = 'red'
   } else {
-    if (cell.textContent === '-') {
+    if (cell.textContent === '') {
       console.log('miss')
     }
   }
