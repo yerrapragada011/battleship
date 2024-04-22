@@ -1,5 +1,6 @@
 export function renderGameboard(player, containerId, targetPlayer) {
   const container = document.getElementById(containerId)
+  const playerTurn = document.querySelector('.player-turn')
   container.innerHTML = ''
 
   const currentPlayerGameboard = player.gameboard.board
@@ -15,6 +16,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
   container.appendChild(targetPlayerTable)
 
   if (!player.isComputer) {
+    playerTurn.textContent = 'Your turn!'
     currentPlayerTable.querySelectorAll('.cell').forEach((cell) => {
       cell.addEventListener('click', () => {
         const row = parseInt(cell.dataset.row)
@@ -24,11 +26,15 @@ export function renderGameboard(player, containerId, targetPlayer) {
         if (cell.textContent === 'O') {
           cell.textContent = 'X'
           cell.style.color = 'red'
+        } else if (cell.textContent === '') {
+          cell.textContent = '-'
         }
 
         if (targetPlayer.isComputer) {
+          playerTurn.textContent = 'Computer turn!'
           setTimeout(() => {
             computerPlayerAttack(targetPlayer, player)
+            playerTurn.textContent = 'Your turn!'
           }, 1000)
         }
       })
@@ -82,6 +88,7 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
   } else {
     if (cell.textContent === '') {
       console.log('miss')
+      cell.textContent = '-'
     }
   }
 }
