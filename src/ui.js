@@ -28,6 +28,8 @@ export function renderGameboard(player, containerId, targetPlayer) {
           cell.style.color = 'red'
         } else if (cell.textContent === '') {
           cell.textContent = '-'
+        } else if (cell.textContent === '-') {
+          return
         }
 
         if (targetPlayer.isComputer) {
@@ -71,8 +73,14 @@ function createTable(gameboard, containerId, hideShips = false) {
 }
 
 function computerPlayerAttack(computerPlayer, humanPlayer) {
-  const row = Math.floor(Math.random() * 10)
-  const col = Math.floor(Math.random() * 10)
+  let row, col
+  let attackedPositions = new Set()
+
+  do {
+    row = Math.floor(Math.random() * 10)
+    col = Math.floor(Math.random() * 10)
+  } while (attackedPositions.has(`${row},${col}`))
+
   console.log('Row:', row, 'Col:', col)
 
   const cell = document.querySelector(
@@ -91,4 +99,6 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
       cell.textContent = '-'
     }
   }
+
+  attackedPositions.add(`${row},${col}`)
 }
