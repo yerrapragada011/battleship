@@ -17,7 +17,7 @@ export class Gameboard {
       }
 
       for (let i = x; i < x + shipLength; i++) {
-        if (this.board[i][y]) {
+        if (this.board[i][y] !== null) {
           throw new Error('Ship overlaps')
         }
         positions.push([i, y])
@@ -28,7 +28,7 @@ export class Gameboard {
       }
 
       for (let i = y; i < y + shipLength; i++) {
-        if (this.board[x][i]) {
+        if (this.board[x][i] !== null) {
           throw new Error('Ship overlaps')
         }
         positions.push([x, i])
@@ -44,15 +44,23 @@ export class Gameboard {
   }
 
   recieveAttack(x, y) {
-    const cell = this.board[x][y]
+    console.log('Attack coordinates:', y, x)
+    const cell = this.board[y][x]
+    console.log(cell instanceof Ship)
     console.log('Cell:', cell)
+
     if (cell === null) {
+      console.log('Missed attack at coordinates:', y, x)
       this.missedAttacks.push([x, y])
     } else if (cell === '-') {
-      this.missedAttacks.push([x, y])
+      console.log('Already attacked at coordinates:', y, x)
     } else if (cell instanceof Ship) {
-      console.log('Ship hit:', cell)
-      cell.hit()
+      if (cell._positions.some(([row, col]) => row === y && col === x)) {
+        console.log('Ship hit:', cell)
+        cell.hit()
+      } else {
+        console.log('No ship hit at coordinates:', y, x)
+      }
     }
   }
 

@@ -32,7 +32,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
       cell.addEventListener('click', () => {
         const row = parseInt(cell.dataset.row)
         const col = parseInt(cell.dataset.col)
-        player.attack(row, col, targetPlayer)
+        player.attack(row, col, player)
 
         if (cell.textContent === 'O') {
           cell.textContent = 'X'
@@ -117,7 +117,7 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
     `[data-row="${row}"][data-col="${col}"][data-container="player2-board"]`
   )
 
-  computerPlayer.attack(row, col, humanPlayer)
+  computerPlayer.attack(row, col, computerPlayer)
 
   if (cell.textContent === 'O') {
     console.log('hit')
