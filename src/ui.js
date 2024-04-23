@@ -5,6 +5,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
 
   const currentPlayerGameboard = player.gameboard.board
   const currentPlayerShips = player.gameboard.ships
+
   const currentPlayerTable = createTable(
     currentPlayerGameboard,
     currentPlayerShips,
@@ -23,8 +24,6 @@ export function renderGameboard(player, containerId, targetPlayer) {
   container.appendChild(targetPlayerTable)
 
   if (!player.isComputer) {
-    console.log(currentPlayerShips)
-    console.log(targetPlayerShips)
     playerTurn.textContent = 'Your turn!'
     currentPlayerTable.querySelectorAll('.cell').forEach((cell) => {
       cell.addEventListener('click', () => {
