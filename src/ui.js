@@ -8,8 +8,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
   const currentPlayerTable = createTable(
     currentPlayerGameboard,
     currentPlayerShips,
-    containerId,
-    true
+    containerId
   )
   container.appendChild(currentPlayerTable)
 
@@ -19,8 +18,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
   const targetPlayerTable = createTable(
     targetPlayerGameboard,
     targetPlayerShips,
-    'player2-board',
-    true
+    'player2-board'
   )
   container.appendChild(targetPlayerTable)
 
@@ -77,7 +75,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
   }
 }
 
-function createTable(gameboard, ships, containerId, hideShips = false) {
+function createTable(gameboard, ships, containerId) {
   const table = document.createElement('table')
   table.classList.add('table')
 
@@ -90,7 +88,7 @@ function createTable(gameboard, ships, containerId, hideShips = false) {
 
       let hasShip = false
 
-      if (hideShips && ships) {
+      if (ships) {
         for (const ship of ships) {
           for (const position of ship._positions) {
             if (position[0] === j && position[1] === i) {
