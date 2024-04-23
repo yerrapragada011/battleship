@@ -44,19 +44,14 @@ export class Gameboard {
   }
 
   recieveAttack(x, y) {
-    console.log('Attack coordinates:', y, x)
     const cell = this.board[y][x]
-    console.log(cell instanceof Ship)
-    console.log('Cell:', cell)
 
     if (cell === null) {
-      console.log('Missed attack at coordinates:', y, x)
       this.missedAttacks.push([x, y])
     } else if (cell === '-') {
       console.log('Already attacked at coordinates:', y, x)
     } else if (cell instanceof Ship) {
       if (cell._positions.some(([row, col]) => row === y && col === x)) {
-        console.log('Ship hit:', cell)
         cell.hit()
       } else {
         console.log('No ship hit at coordinates:', y, x)

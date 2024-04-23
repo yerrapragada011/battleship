@@ -37,26 +37,40 @@ export function renderGameboard(player, containerId, targetPlayer) {
         if (cell.textContent === 'O') {
           cell.textContent = 'X'
           cell.style.color = 'red'
-        } else if (cell.textContent === '') {
-          cell.textContent = '-'
+        } else if (
+          (cell.textContent === '' && targetPlayer.gameboard.allShipsSunk()) ||
+          player.gameboard.allShipsSunk()
+        ) {
+          return
         } else if (cell.textContent === '-') {
           return
         } else if (cell.textContent === 'X') {
           return
+        } else if (cell.textContent === '') {
+          cell.textContent = '-'
         }
 
-        if (targetPlayer.isComputer) {
-          playerTurn.textContent = 'Computer turn!'
-          setTimeout(() => {
-            computerPlayerAttack(targetPlayer, player)
-            if (targetPlayer.gameboard.allShipsSunk()) {
-              playerTurn.textContent = 'Computer wins!'
-            } else if (player.gameboard.allShipsSunk()) {
-              playerTurn.textContent = 'You win!'
-            } else if (!player.gameboard.allShipsSunk()) {
-              playerTurn.textContent = 'Your turn!'
-            }
-          }, 1000)
+        if (
+          !player.gameboard.allShipsSunk() &&
+          !targetPlayer.gameboard.allShipsSunk()
+        ) {
+          if (targetPlayer.isComputer) {
+            playerTurn.textContent = 'Computer turn!'
+            setTimeout(() => {
+              computerPlayerAttack(targetPlayer)
+              if (!player.gameboard.allShipsSunk()) {
+                playerTurn.textContent = 'Your turn!'
+              }
+            }, 1000)
+          }
+        }
+
+        if (targetPlayer.gameboard.allShipsSunk()) {
+          playerTurn.textContent = 'Computer wins!'
+          return
+        } else if (player.gameboard.allShipsSunk()) {
+          playerTurn.textContent = 'You win!'
+          return
         }
       })
     })
@@ -102,7 +116,7 @@ function createTable(gameboard, ships, containerId, hideShips = false) {
   return table
 }
 
-function computerPlayerAttack(computerPlayer, humanPlayer) {
+function computerPlayerAttack(computerPlayer) {
   let row, col
   let attackedPositions = new Set()
 
@@ -111,8 +125,6 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
     col = Math.floor(Math.random() * 10)
   } while (attackedPositions.has(`${row},${col}`))
 
-  console.log('Row:', row, 'Col:', col)
-
   const cell = document.querySelector(
     `[data-row="${row}"][data-col="${col}"][data-container="player2-board"]`
   )
@@ -120,14 +132,10 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
   computerPlayer.attack(row, col, computerPlayer)
 
   if (cell.textContent === 'O') {
-    console.log('hit')
     cell.textContent = 'X'
     cell.style.color = 'red'
   } else if (cell.textContent === '' || cell.textContent === '-') {
-    console.log('miss')
     cell.textContent = '-'
-  } else {
-    console.log('miss')
   }
 
   attackedPositions.add(`${row},${col}`)
