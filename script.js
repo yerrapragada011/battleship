@@ -1,6 +1,8 @@
 import { Player } from './src/player.js'
 import { renderGameboard } from './src/ui.js'
 
+const gameStart = document.getElementById('start-game')
+
 function startGame() {
   const player1 = new Player()
   const player2 = new Player(true)
@@ -9,6 +11,8 @@ function startGame() {
   player2.gameboard.setPredeterminedShips()
 
   renderGameboard(player1, 'player1-board', player2)
+
+  gameStart.textContent = 'Reset'
 }
 
-document.getElementById('start-game').addEventListener('click', startGame)
+gameStart.addEventListener('click', startGame)
