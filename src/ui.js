@@ -102,7 +102,12 @@ function createTable(gameboard, ships, containerId, hideShips = false) {
         }
       }
 
-      cell.textContent = hasShip ? 'O' : ''
+      if (hasShip && containerId == 'player1-board') {
+        cell.textContent = 'O'
+        cell.style.color = 'transparent'
+      } else if (hasShip) {
+        cell.textContent = 'O'
+      }
 
       cell.dataset.row = i
       cell.dataset.col = j
