@@ -44,11 +44,15 @@ export class Gameboard {
   }
 
   recieveAttack(x, y) {
-    if (this.board[x][y] === null) {
+    const cell = this.board[x][y]
+    console.log('Cell:', cell)
+    if (cell === null) {
       this.missedAttacks.push([x, y])
-    } else {
-      let ship = this.board[x][y]
-      ship.hit()
+    } else if (cell === '-') {
+      this.missedAttacks.push([x, y])
+    } else if (cell instanceof Ship) {
+      console.log('Ship hit:', cell)
+      cell.hit()
     }
   }
 

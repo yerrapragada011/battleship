@@ -4,18 +4,29 @@ export function renderGameboard(player, containerId, targetPlayer) {
   container.innerHTML = ''
 
   const currentPlayerGameboard = player.gameboard.board
+  const currentPlayerShips = player.gameboard.ships
   const currentPlayerTable = createTable(
     currentPlayerGameboard,
+    currentPlayerShips,
     containerId,
     true
   )
   container.appendChild(currentPlayerTable)
 
   const targetPlayerGameboard = targetPlayer.gameboard.board
-  const targetPlayerTable = createTable(targetPlayerGameboard, 'player2-board')
+  const targetPlayerShips = targetPlayer.gameboard.ships
+
+  const targetPlayerTable = createTable(
+    targetPlayerGameboard,
+    targetPlayerShips,
+    'player2-board',
+    true
+  )
   container.appendChild(targetPlayerTable)
 
   if (!player.isComputer) {
+    console.log(currentPlayerShips)
+    console.log(targetPlayerShips)
     playerTurn.textContent = 'Your turn!'
     currentPlayerTable.querySelectorAll('.cell').forEach((cell) => {
       cell.addEventListener('click', () => {
@@ -30,13 +41,21 @@ export function renderGameboard(player, containerId, targetPlayer) {
           cell.textContent = '-'
         } else if (cell.textContent === '-') {
           return
+        } else if (cell.textContent === 'X') {
+          return
         }
 
         if (targetPlayer.isComputer) {
           playerTurn.textContent = 'Computer turn!'
           setTimeout(() => {
             computerPlayerAttack(targetPlayer, player)
-            playerTurn.textContent = 'Your turn!'
+            if (targetPlayer.gameboard.allShipsSunk()) {
+              playerTurn.textContent = 'Computer wins!'
+            } else if (player.gameboard.allShipsSunk()) {
+              playerTurn.textContent = 'You win!'
+            } else if (!player.gameboard.allShipsSunk()) {
+              playerTurn.textContent = 'Your turn!'
+            }
           }, 1000)
         }
       })
@@ -44,7 +63,7 @@ export function renderGameboard(player, containerId, targetPlayer) {
   }
 }
 
-function createTable(gameboard, containerId, hideShips = false) {
+function createTable(gameboard, ships, containerId, hideShips = false) {
   const table = document.createElement('table')
   table.classList.add('table')
 
@@ -54,12 +73,23 @@ function createTable(gameboard, containerId, hideShips = false) {
     for (let j = 0; j < gameboard[i].length; j++) {
       const cell = document.createElement('td')
       cell.classList.add('cell')
-      if (hideShips && gameboard[i][j]) {
-        cell.textContent = 'O'
-        cell.style.color = 'transparent'
-      } else {
-        cell.textContent = gameboard[i][j] ? 'O' : ''
+
+      let hasShip = false
+
+      if (hideShips && ships) {
+        for (const ship of ships) {
+          for (const position of ship._positions) {
+            if (position[0] === j && position[1] === i) {
+              hasShip = true
+              break
+            }
+          }
+          if (hasShip) break
+        }
       }
+
+      cell.textContent = hasShip ? 'O' : ''
+
       cell.dataset.row = i
       cell.dataset.col = j
       cell.dataset.container = containerId
@@ -93,11 +123,11 @@ function computerPlayerAttack(computerPlayer, humanPlayer) {
     console.log('hit')
     cell.textContent = 'X'
     cell.style.color = 'red'
+  } else if (cell.textContent === '' || cell.textContent === '-') {
+    console.log('miss')
+    cell.textContent = '-'
   } else {
-    if (cell.textContent === '') {
-      console.log('miss')
-      cell.textContent = '-'
-    }
+    console.log('miss')
   }
 
   attackedPositions.add(`${row},${col}`)
