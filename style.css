@@ -16,4 +16,8 @@
 .table {
   border-collapse: collapse;
   margin: 10px 0px;
+  /*the below code removes a cheatcode. On mouse drag and scroll, the enemies positions are revealed to the user :)*/
+   -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none;
 }
